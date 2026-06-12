@@ -49,7 +49,7 @@ body.flashlight-on .scene {
 }
 
 body.flashlight-off #flashlight-beam {
-    background: rgba(2, 2, 8, 0.93) !important;
+    background: rgba(2, 2, 8, 0.85) !important;
 }
 
 #flashlight-switch-tip {
@@ -364,22 +364,78 @@ body.flashlight-off #flashlight-beam {
 .door-silhouette {
     width: 80%;
     height: 85%;
-    border: 3px solid rgba(255, 255, 255, 0.15);
-    background: linear-gradient(to bottom, #0a0a10, #040406);
-    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.95);
+    border: 3px solid #20202c;
+    background: linear-gradient(to bottom, #101018, #07070b);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.95), 0 0 10px rgba(255,255,255,0.03);
     position: relative;
     border-radius: 4px;
     transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+/* Door inner panels */
+.door-silhouette::before {
+    content: "";
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 2px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Brass door handle */
+.door-silhouette::after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #e6b800 20%, #997a00 80%);
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .closet-silhouette {
     width: 85%;
     height: 90%;
-    border: 3px solid rgba(255, 255, 255, 0.15);
-    background: linear-gradient(to right, #0a0a10 50%, #06060a 50%);
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.98);
+    border: 3px solid #1a1a24;
+    background: linear-gradient(to right, #09090e 48%, #20202e 48%, #20202e 52%, #09090e 52%);
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.98), 0 0 10px rgba(255,255,255,0.03);
     position: relative;
     border-radius: 2px;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+/* Closet inner panel lines */
+.closet-silhouette::before {
+    content: "";
+    position: absolute;
+    top: 5%;
+    bottom: 5%;
+    left: 5%;
+    right: 5%;
+    border: 1px dashed rgba(255, 255, 255, 0.03);
+    pointer-events: none;
+}
+
+/* Closet double door handles */
+.closet-silhouette::after {
+    content: "";
+    position: absolute;
+    left: calc(50% - 5px);
+    top: 45%;
+    width: 10px;
+    height: 20px;
+    background: linear-gradient(to right, #444 30%, #222 70%);
+    border-radius: 1px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
     transition: all 0.3s ease;
 }
 
@@ -632,7 +688,7 @@ body.flashlight-on #scene-behind .freddy-plush {
 .foxy-shadow::after { right: 40%; }
 
 /* Foxy peeking visual - yellow glowing eyes on closet hotspot */
-.foxy-peeking .closet-silhouette::after {
+.foxy-peeking .closet-silhouette::before {
     content: "";
     position: absolute;
     top: 30%;
@@ -643,6 +699,8 @@ body.flashlight-on #scene-behind .freddy-plush {
     box-shadow: 0 0 8px #ff9900;
     border-radius: 50%;
     animation: blink-eyes 4s infinite ease-in-out;
+    border: none;
+    box-shadow: 0 0 8px #ff9900;
 }
 
 @keyframes blink-eyes {

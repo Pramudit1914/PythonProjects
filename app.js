@@ -460,7 +460,7 @@ const game = {
         // Also allow toggling flashlight with regular mouse clicks on the viewport
         document.getElementById('scene-viewport').addEventListener('click', (e) => {
             // Only toggle if we didn't click on an interactive button or hotspot
-            if (e.target.tagName !== 'BUTTON' && !e.target.classList.contains('hotspot') && this.status === 'playing') {
+            if (e.target.tagName !== 'BUTTON' && !e.target.closest('.hotspot') && this.status === 'playing') {
                 this.toggleFlashlight();
             }
         });

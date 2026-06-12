@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FNAF 4 - Face Your Nightmare</title>
+    <!-- Google Fonts for horror & retro tech styling -->
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Share+Tech+Mono&family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="horror-theme">
+    
+    <!-- Immersive Flashlight beam overlay -->
+    <div id="flashlight-beam"></div>
+    <div id="flashlight-switch-tip">Click anywhere to Toggle Flashlight (F)</div>
+
+    <!-- Start / Title Screen -->
+    <div id="start-screen" class="overlay-screen active">
+        <div class="glow-box">
+            <h1 class="horror-title">FIVE NIGHTS AT FREDDY'S 4</h1>
+            <p class="subtitle">A Text-Adventure Nightmare Brought to Life</p>
+            
+            <div class="lore-box">
+                <p>You are awoken in a dark room. You have no idea where you are or how you got there.</p>
+                <p>It's almost like a nightmare. But you somehow have deja vu, though you know you have never been here.</p>
+                <p>Your heart is pounding. It's too bad your doors can't be locked, to keep whatever's out there away...</p>
+                <p class="warning-text">ALL OF THEM COME FROM THE DOORS, EXCEPT FOXY. HE COMES FROM THE CLOSET.</p>
+                <p class="warning-text">IF YOU HEAR BREATHING AT A DOOR, NEVER SHINE YOUR FLASHLIGHT. CLOSE THE DOOR AND WAIT.</p>
+            </div>
+
+            <button id="btn-start" class="btn btn-primary">FACE THE NIGHTMARE</button>
+        </div>
+    </div>
+
+    <!-- Jumpscare / Death Screen -->
+    <div id="death-screen" class="overlay-screen">
+        <div id="jumpscare-visual">
+            <div class="jumpscare-eye left"></div>
+            <div class="jumpscare-eye right"></div>
+            <div class="jumpscare-mouth"></div>
+        </div>
+        <div class="death-content">
+            <h2 class="death-title">IT GOT YOU...</h2>
+            <p id="death-reason" class="death-msg"></p>
+            <button id="btn-restart" class="btn btn-danger">TRY AGAIN</button>
+        </div>
+    </div>
+
+    <!-- Win Screen -->
+    <div id="win-screen" class="overlay-screen">
+        <div class="win-content">
+            <div class="clock-win">5:59 <span class="am">AM</span></div>
+            <div class="clock-tick-to-6">6:00 <span class="am">AM</span></div>
+            <h2 class="victory-title">VICTORY</h2>
+            <p class="victory-msg">You survived until the morning sun. The nightmare is over... for now.</p>
+            <button id="btn-win-restart" class="btn btn-success">PLAY AGAIN</button>
+        </div>
+    </div>
+
+    <!-- Main Game HUD and Workspace -->
+    <div id="game-interface" class="hidden">
+        
+        <!-- Status Bar -->
+        <header id="hud">
+            <div class="hud-item">
+                <span class="hud-label">TIME</span>
+                <span id="display-time" class="hud-value">12 AM</span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">ACTIONS</span>
+                <span id="display-actions" class="hud-value">0/5</span>
+            </div>
+            <div class="hud-item clickable" id="hud-flashlight">
+                <span class="hud-label">FLASHLIGHT</span>
+                <span id="display-flashlight" class="hud-value status-off">OFF</span>
+            </div>
+        </header>
+
+        <!-- Scene Container -->
+        <main id="scene-viewport" class="room-center">
+            
+            <!-- VIEW: CENTER OF THE BEDROOM -->
+            <div id="scene-room" class="scene">
+                <div class="view-overlay shadow-vignette"></div>
+                <div class="scene-title">Center Bedroom</div>
+                
+                <!-- Room hotspots -->
+                <div class="hotspot" id="hotspot-left-door" title="Go to Left Door">
+                    <span class="hotspot-label">Left Door</span>
+                    <div class="door-silhouette"></div>
+                </div>
+                <div class="hotspot" id="hotspot-closet" title="Go to Closet">
+                    <span class="hotspot-label">Closet</span>
+                    <div class="closet-silhouette"></div>
+                    <div id="closet-state-indicator" class="hidden">Slightly Open</div>
+                </div>
+                <div class="hotspot" id="hotspot-right-door" title="Go to Right Door">
+                    <span class="hotspot-label">Right Door</span>
+                    <div class="door-silhouette"></div>
+                </div>
+
+                <button id="btn-turn-around" class="nav-btn">Look Behind (Bed)</button>
+            </div>
+
+            <!-- VIEW: LEFT DOOR -->
+            <div id="scene-door1" class="scene">
+                <div class="view-overlay shadow-vignette"></div>
+                <div class="scene-title">Left Doorway</div>
+                
+                <div class="door-visual closed" id="visual-door1">
+                    <div class="door-handle"></div>
+                </div>
+                <div class="monster-shadow" id="shadow-door1"></div>
+                
+                <div class="door-controls">
+                    <button id="btn-door1-toggle" class="btn btn-action">Open Door</button>
+                    <button id="btn-door1-flashlight" class="btn btn-action disabled">Shine Flashlight</button>
+                    <button id="btn-door1-back" class="btn btn-nav">Go Back</button>
+                </div>
+            </div>
+
+            <!-- VIEW: RIGHT DOOR -->
+            <div id="scene-door2" class="scene">
+                <div class="view-overlay shadow-vignette"></div>
+                <div class="scene-title">Right Doorway</div>
+                
+                <div class="door-visual closed" id="visual-door2">
+                    <div class="door-handle"></div>
+                </div>
+                <div class="monster-shadow" id="shadow-door2"></div>
+
+                <div class="door-controls">
+                    <button id="btn-door2-toggle" class="btn btn-action">Open Door</button>
+                    <button id="btn-door2-flashlight" class="btn btn-action disabled">Shine Flashlight</button>
+                    <button id="btn-door2-back" class="btn btn-nav">Go Back</button>
+                </div>
+            </div>
+
+            <!-- VIEW: CLOSET -->
+            <div id="scene-closet" class="scene">
+                <div class="view-overlay shadow-vignette"></div>
+                <div class="scene-title">Closet</div>
+                
+                <div class="closet-visual closed" id="visual-closet">
+                    <div class="closet-door left-wing"></div>
+                    <div class="closet-door right-wing"></div>
+                </div>
+                <div class="foxy-shadow" id="shadow-foxy"></div>
+
+                <div class="door-controls">
+                    <button id="btn-closet-open" class="btn btn-action">Open Closet Door</button>
+                    <button id="btn-closet-close" class="btn btn-action">Close Closet Door</button>
+                    <button id="btn-closet-back" class="btn btn-nav">Go Back</button>
+                </div>
+            </div>
+
+            <!-- VIEW: LOOKING BEHIND (BED) -->
+            <div id="scene-behind" class="scene">
+                <div class="view-overlay shadow-vignette"></div>
+                <div class="scene-title">The Bed</div>
+                
+                <div class="bed-visual">
+                    <div class="bed-pillow"></div>
+                    <div class="bed-sheet"></div>
+                    <div class="freddy-plush" id="freddy-plush"></div>
+                </div>
+
+                <div class="door-controls">
+                    <button id="btn-behind-flashlight" class="btn btn-action">Shine Bed</button>
+                    <button id="btn-behind-back" class="btn btn-nav">Turn Back Around</button>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Narrative Terminal Console -->
+        <footer id="console-section">
+            <div class="console-header">
+                <span class="console-title">NARRATIVE LOGS</span>
+                <span class="system-status">SYSTEM ACTIVE</span>
+            </div>
+            <div id="console-logs" class="console-content">
+                <!-- Log entries will be appended dynamically -->
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

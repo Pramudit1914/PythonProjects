@@ -1,0 +1,936 @@
+/* Reset & General Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+:root {
+    --flashlight-x: 50%;
+    --flashlight-y: 50%;
+    --glow-color: rgba(255, 0, 0, 0.4);
+    --panel-bg: rgba(10, 10, 15, 0.85);
+    --border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.horror-theme {
+    background-color: #030305;
+    color: #e2e2e8;
+    font-family: 'Outfit', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    cursor: crosshair;
+}
+
+/* Flashlight Overlay */
+#flashlight-beam {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+    transition: background 0.15s cubic-bezier(0.19, 1, 0.22, 1);
+    background: radial-gradient(
+        circle 220px at var(--flashlight-x) var(--flashlight-y),
+        rgba(255, 255, 250, 0) 0%,
+        rgba(0, 0, 0, 0.5) 60%,
+        rgba(0, 0, 0, 0.98) 100%
+    );
+}
+
+body.flashlight-on .scene {
+    filter: brightness(2.0) contrast(1.05);
+    transition: filter 0.15s ease-in-out;
+}
+
+body.flashlight-off #flashlight-beam {
+    background: rgba(2, 2, 8, 0.93) !important;
+}
+
+#flashlight-switch-tip {
+    position: absolute;
+    bottom: 24%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.3);
+    z-index: 105;
+    pointer-events: none;
+    animation: pulse-opacity 3s infinite ease-in-out;
+}
+
+@keyframes pulse-opacity {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.8; }
+}
+
+/* Screens / Overlays */
+.overlay-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.overlay-screen.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.glow-box {
+    background: rgba(5, 5, 8, 0.95);
+    border: 1px solid rgba(255, 0, 0, 0.15);
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.1);
+    padding: 3rem;
+    border-radius: 8px;
+    max-width: 650px;
+    width: 90%;
+    text-align: center;
+}
+
+.horror-title {
+    font-family: 'Creepster', cursive;
+    font-size: 3.5rem;
+    color: #ff1a1a;
+    text-shadow: 0 0 15px rgba(255, 26, 26, 0.6);
+    margin-bottom: 0.5rem;
+    letter-spacing: 2px;
+    animation: flicker 4s infinite;
+}
+
+.subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    color: #888;
+    margin-bottom: 2rem;
+}
+
+.lore-box {
+    background: rgba(0, 0, 0, 0.5);
+    border-left: 3px solid #ff1a1a;
+    padding: 1.5rem;
+    text-align: left;
+    margin-bottom: 2.5rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.lore-box p {
+    margin-bottom: 1rem;
+}
+
+.lore-box p:last-child {
+    margin-bottom: 0;
+}
+
+.warning-text {
+    color: #ff4d4d;
+    font-weight: bold;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+/* Buttons */
+.btn {
+    font-family: 'Share Tech Mono', monospace;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    letter-spacing: 1px;
+}
+
+.btn-primary {
+    background-color: #ff1a1a;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 26, 26, 0.4);
+}
+
+.btn-primary:hover {
+    background-color: #ff4d4d;
+    box-shadow: 0 0 25px rgba(255, 77, 77, 0.8);
+    transform: scale(1.05);
+}
+
+.btn-danger {
+    background-color: #ff1a1a;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 26, 26, 0.3);
+}
+
+.btn-danger:hover {
+    background-color: #b30000;
+    box-shadow: 0 0 20px rgba(179, 0, 0, 0.6);
+}
+
+.btn-success {
+    background-color: #00ff66;
+    color: #000;
+    font-weight: bold;
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+}
+
+.btn-success:hover {
+    background-color: #33ff88;
+    box-shadow: 0 0 20px rgba(51, 255, 136, 0.6);
+}
+
+.btn-action {
+    background-color: rgba(30, 30, 40, 0.8);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 160px;
+}
+
+.btn-action:hover:not(.disabled) {
+    background-color: #ff1a1a;
+    border-color: #ff1a1a;
+    box-shadow: 0 0 15px rgba(255, 26, 26, 0.4);
+}
+
+.btn-action.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.btn-nav {
+    background: transparent;
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.btn-nav:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.05);
+}
+
+/* HUD Header */
+#hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 3rem;
+    z-index: 200;
+}
+
+.hud-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.hud-item.clickable {
+    cursor: pointer;
+}
+
+.hud-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: #888;
+    letter-spacing: 2px;
+}
+
+.hud-value {
+    font-size: 1.4rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+#hud-flashlight:hover .hud-label {
+    color: #ff1a1a;
+}
+
+.status-on {
+    color: #00ff66;
+    text-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
+}
+
+.status-off {
+    color: #ff1a1a;
+    text-shadow: 0 0 10px rgba(255, 26, 26, 0.4);
+}
+
+/* Scene Viewport */
+#scene-viewport {
+    position: absolute;
+    top: 70px;
+    bottom: 220px;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    background-color: #050508;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+}
+
+.scene {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* View activations */
+.room-center #scene-room,
+.room-door1 #scene-door1,
+.room-door2 #scene-door2,
+.room-closet #scene-closet,
+.room-behind #scene-behind {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Scene specifics */
+.scene-title {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.shadow-vignette {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.85) 100%);
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Interactive Room Hotspots */
+.hotspot {
+    position: absolute;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.002);
+}
+
+.hotspot-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.45);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    pointer-events: none;
+    margin-bottom: 12px;
+    z-index: 6;
+}
+
+.hotspot:hover .hotspot-label {
+    color: #ff1a1a;
+    text-shadow: 0 0 8px rgba(255,26,26,0.6);
+}
+
+/* Door and Closet silhouettes in Room center */
+.door-silhouette {
+    width: 80%;
+    height: 85%;
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    background: linear-gradient(to bottom, #0a0a10, #040406);
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.95);
+    position: relative;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.closet-silhouette {
+    width: 85%;
+    height: 90%;
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    background: linear-gradient(to right, #0a0a10 50%, #06060a 50%);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.98);
+    position: relative;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.hotspot:hover .door-silhouette,
+.hotspot:hover .closet-silhouette {
+    border-color: #ff1a1a;
+    box-shadow: 0 0 15px rgba(255, 26, 26, 0.25), inset 0 0 15px rgba(255, 26, 26, 0.08);
+}
+
+/* Position Hotspots (Bedroom map layout) */
+#hotspot-left-door {
+    top: 15%;
+    left: 5%;
+    width: 20%;
+    height: 70%;
+}
+
+#hotspot-right-door {
+    top: 15%;
+    right: 5%;
+    width: 20%;
+    height: 70%;
+}
+
+#hotspot-closet {
+    top: 10%;
+    left: 38%;
+    width: 24%;
+    height: 75%;
+}
+
+#closet-state-indicator {
+    position: absolute;
+    bottom: -30px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: #ff4d4d;
+    background: rgba(0,0,0,0.8);
+    padding: 2px 8px;
+    border: 1px solid #ff1a1a;
+    border-radius: 3px;
+    animation: flash 1.5s infinite;
+}
+
+.nav-btn {
+    position: absolute;
+    bottom: 30px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    padding: 0.6rem 1.8rem;
+    background: rgba(15,15,20,0.8);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #ccc;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    z-index: 105;
+}
+
+.nav-btn:hover {
+    color: #fff;
+    border-color: #ff1a1a;
+    background-color: rgba(255, 26, 26, 0.05);
+}
+
+/* Scene Visual Mockups (Using stylized CSS shapes) */
+.door-visual {
+    width: 220px;
+    height: 400px;
+    background-color: #0d0d14;
+    border: 8px solid #08080c;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9);
+    transition: all 0.4s ease-out;
+}
+
+.door-visual.open {
+    transform: perspective(800px) rotateY(-80deg);
+    transform-origin: left center;
+    background-color: #010103;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+}
+
+.door-handle {
+    width: 12px;
+    height: 45px;
+    background-color: #1a1a1f;
+    border-radius: 4px;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.door-visual.open .door-handle {
+    opacity: 0;
+}
+
+.door-controls {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    z-index: 105;
+}
+
+/* Closet Visual Mockup */
+.closet-visual {
+    width: 280px;
+    height: 400px;
+    background-color: #09090f;
+    border: 10px solid #06060a;
+    position: relative;
+    box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.95);
+    display: flex;
+}
+
+.closet-door {
+    width: 50%;
+    height: 100%;
+    background-color: #11111a;
+    border: 3px solid #08080d;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.closet-door.left-wing {
+    transform-origin: left center;
+}
+
+.closet-door.right-wing {
+    transform-origin: right center;
+}
+
+.closet-visual.open .closet-door.left-wing {
+    transform: perspective(600px) rotateY(-80deg);
+}
+
+.closet-visual.open .closet-door.right-wing {
+    transform: perspective(600px) rotateY(80deg);
+}
+
+/* Bed Visual Mockup */
+.bed-visual {
+    width: 450px;
+    height: 250px;
+    background-color: #1a1a24;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    border: 4px solid #11111a;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.7);
+}
+
+.bed-pillow {
+    width: 140px;
+    height: 60px;
+    background-color: #2e2e3d;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 8px;
+    box-shadow: inset 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.bed-sheet {
+    width: 100%;
+    height: 150px;
+    background-color: #2b1f1f;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-radius: 0 0 4px 4px;
+    box-shadow: inset 0 10px 20px rgba(0,0,0,0.6);
+}
+
+.freddy-plush {
+    width: 40px;
+    height: 50px;
+    background-color: #4a2f13;
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50% 50% 40% 40%;
+    border: 2px solid #291807;
+    opacity: 0.15;
+    transition: opacity 0.3s ease;
+}
+
+body.flashlight-on #scene-behind .freddy-plush {
+    opacity: 0.85;
+}
+
+/* Monster Silhouettes */
+.monster-shadow {
+    width: 200px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(230, 0, 0, 0.75) 0%, rgba(180, 0, 0, 0.3) 50%, transparent 80%);
+    position: absolute;
+    opacity: 0;
+    filter: blur(20px);
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.monster-shadow::before,
+.monster-shadow::after {
+    content: "";
+    position: absolute;
+    top: 35%;
+    width: 8px;
+    height: 8px;
+    background-color: #ff3300;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+    animation: flash 1s infinite alternate;
+}
+
+.monster-shadow::before { left: 42%; }
+.monster-shadow::after { right: 42%; }
+
+.foxy-shadow {
+    width: 240px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(255, 60, 0, 0.7) 0%, rgba(150, 20, 0, 0.25) 50%, transparent 75%);
+    position: absolute;
+    opacity: 0;
+    filter: blur(15px);
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.foxy-shadow::before,
+.foxy-shadow::after {
+    content: "";
+    position: absolute;
+    top: 30%;
+    width: 9px;
+    height: 9px;
+    background-color: #ffa500;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #ff7700, 0 0 20px #ff5500;
+    animation: flash 0.8s infinite alternate;
+}
+
+.foxy-shadow::before { left: 40%; }
+.foxy-shadow::after { right: 40%; }
+
+/* Foxy peeking visual - yellow glowing eyes on closet hotspot */
+.foxy-peeking .closet-silhouette::after {
+    content: "";
+    position: absolute;
+    top: 30%;
+    left: calc(50% - 12px);
+    width: 24px;
+    height: 10px;
+    background: radial-gradient(circle, #ffcc00 25%, transparent 60%);
+    box-shadow: 0 0 8px #ff9900;
+    border-radius: 50%;
+    animation: blink-eyes 4s infinite ease-in-out;
+}
+
+@keyframes blink-eyes {
+    0%, 94%, 98%, 100% { transform: scaleY(1); }
+    96% { transform: scaleY(0); }
+}
+
+/* Jumpscare animation variables */
+.jumpscare-triggered #scene-viewport {
+    animation: screen-shake 0.15s infinite;
+}
+
+/* Screen Shake Keyframes */
+@keyframes screen-shake {
+    0% { transform: translate(3px, 3px) rotate(0deg); }
+    10% { transform: translate(-3px, -3px) rotate(-1deg); }
+    20% { transform: translate(-5px, 0px) rotate(1deg); }
+    30% { transform: translate(0px, 4px) rotate(0deg); }
+    40% { transform: translate(3px, -3px) rotate(1deg); }
+    50% { transform: translate(-3px, 4px) rotate(-1deg); }
+    60% { transform: translate(-5px, 3px) rotate(0deg); }
+    70% { transform: translate(4px, 3px) rotate(-1deg); }
+    80% { transform: translate(-3px, -3px) rotate(1deg); }
+    90% { transform: translate(5px, 4px) rotate(0deg); }
+    100% { transform: translate(3px, -4px) rotate(-1deg); }
+}
+
+/* Jumpscare Face Design (Retro CSS Monstrosity) */
+#jumpscare-visual {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    display: none;
+    z-index: 1010;
+    transform: scale(0.1);
+    transition: transform 0.1s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+.jumpscare-triggered #jumpscare-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: scale(2.2);
+}
+
+.jumpscare-eye {
+    width: 25px;
+    height: 25px;
+    background-color: #ff1a1a;
+    border-radius: 50%;
+    box-shadow: 0 0 15px #ff0000;
+    position: absolute;
+    top: 35%;
+}
+
+.jumpscare-eye.left { left: 30%; }
+.jumpscare-eye.right { right: 30%; }
+
+.jumpscare-mouth {
+    width: 140px;
+    height: 70px;
+    background-color: #111;
+    border: 5px solid #222;
+    border-radius: 0 0 70px 70px;
+    position: absolute;
+    bottom: 25%;
+    overflow: hidden;
+}
+
+.jumpscare-mouth::before {
+    content: "WWWWWWWWWWWW";
+    color: #e2e2e8;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    position: absolute;
+    top: 2px;
+    left: 8px;
+    font-family: monospace;
+}
+
+/* Console logs section */
+#console-section {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 220px;
+    background-color: #060609;
+    border-top: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+}
+
+.console-header {
+    background-color: rgba(15, 15, 20, 0.95);
+    padding: 0.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.console-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: #ff1a1a;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.system-status {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: #00ff66;
+}
+
+.console-content {
+    flex-grow: 1;
+    padding: 1.2rem 2rem;
+    overflow-y: auto;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #aaa;
+    background-color: #030305;
+}
+
+.console-entry {
+    margin-bottom: 0.6rem;
+    border-left: 2px solid rgba(255,255,255,0.05);
+    padding-left: 10px;
+    animation: fade-in 0.2s ease-out;
+}
+
+.console-entry.system {
+    color: #888;
+}
+
+.console-entry.warning {
+    color: #ff4d4d;
+}
+
+.console-entry.success {
+    color: #00ff66;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Victory Clock ticking */
+.clock-win {
+    font-size: 4rem;
+    font-family: monospace;
+    color: #fff;
+    opacity: 1;
+}
+
+.win-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.clock-tick-to-6 {
+    font-size: 5rem;
+    font-family: monospace;
+    color: #00ff66;
+    font-weight: bold;
+    text-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
+    opacity: 0;
+    position: absolute;
+    top: 20%;
+}
+
+.win-screen-cheering .clock-win {
+    animation: fade-out-clock 1s forwards;
+}
+
+.win-screen-cheering .clock-tick-to-6 {
+    animation: fade-in-clock 1s 1s forwards, clock-pulse 1s 2s infinite alternate;
+}
+
+@keyframes fade-out-clock {
+    to { opacity: 0; transform: scale(0.8); }
+}
+
+@keyframes fade-in-clock {
+    to { opacity: 1; transform: scale(1.1); }
+}
+
+@keyframes clock-pulse {
+    from { transform: scale(1.1); text-shadow: 0 0 20px rgba(0, 255, 102, 0.5); }
+    to { transform: scale(1.2); text-shadow: 0 0 35px rgba(0, 255, 102, 0.9); }
+}
+
+.victory-title {
+    font-family: 'Creepster', cursive;
+    font-size: 3rem;
+    color: #00ff66;
+    margin-top: 8rem;
+    opacity: 0;
+}
+
+.win-screen-cheering .victory-title {
+    animation: fade-in-element 0.8s 2s forwards;
+}
+
+.victory-msg {
+    margin: 1rem 0 2.5rem 0;
+    color: #888;
+    opacity: 0;
+    max-width: 450px;
+    text-align: center;
+}
+
+.win-screen-cheering .victory-msg {
+    animation: fade-in-element 0.8s 2.5s forwards;
+}
+
+.win-screen-cheering .win-content button {
+    opacity: 0;
+    animation: fade-in-element 0.8s 3s forwards;
+}
+
+@keyframes fade-in-element {
+    to { opacity: 1; }
+}
+
+/* Jumpscare flash overlay on death */
+.jumpscare-triggered #death-screen {
+    opacity: 1;
+    pointer-events: auto;
+    background-color: #200000;
+    animation: flash-background 0.08s infinite alternate;
+}
+
+@keyframes flash-background {
+    0% { background-color: #1a0000; }
+    100% { background-color: #030000; }
+}
+
+.death-content {
+    opacity: 0;
+    z-index: 1020;
+    text-align: center;
+}
+
+.jumpscare-triggered .death-content {
+    animation: fade-in-element 0.5s 1.5s forwards;
+}
+
+.death-title {
+    font-family: 'Creepster', cursive;
+    font-size: 4rem;
+    color: #ff1a1a;
+    text-shadow: 0 0 20px #000;
+    margin-bottom: 1rem;
+}
+
+.death-msg {
+    font-size: 1.1rem;
+    color: #aaa;
+    margin-bottom: 2rem;
+    max-width: 400px;
+    line-height: 1.5;
+}
+
+/* Animations */
+@keyframes flicker {
+    0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+        opacity: 0.99;
+        text-shadow: 0 0 15px rgba(255, 26, 26, 0.6);
+    }
+    20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+        opacity: 0.4;
+        text-shadow: none;
+    }
+}
+
+@keyframes flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Hidden Utility class */
+.hidden {
+    display: none !important;
+}
